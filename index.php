@@ -118,7 +118,7 @@ function get_day_info($db, $gr, $day, $n_week, $week)
     <div class="container">
         <div class="row">
             <div id="logo" class="col-lg">
-                Расписание занятий РТУ МИРЭА
+                Расписание РТУ МИРЭА
             </div>
         </div>
     </div>
