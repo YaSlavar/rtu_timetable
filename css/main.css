@@ -28,6 +28,15 @@ div#logo{
 }
 
 /*CARDS*/
+.message_box{
+    display: none;
+}
+
+.message_text{
+    font-size: 1.1em;
+    /*color: #3f51b5;*/
+}
+
 .none-group{
     text-align: center;
     color: #3f51b5;
@@ -41,7 +50,7 @@ div#logo{
 }
 
 .start_week{
-    z-index: -1;
+    z-index: 1;
     min-width: 400px;
 }
 

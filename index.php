@@ -32,6 +32,7 @@
     <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="lib/select2/select2.full.min.js"></script>
     <script type="text/javascript" src="lib/select2/ru.js"></script>
+    <script type="text/javascript" src="js/messageBoxController.js"></script>
     <script type="text/javascript"> (function (d, w, c) {
             (w[c] = w[c] || []).push(function () {
                 try {
@@ -130,32 +131,32 @@ function get_day_info($db, $gr, $day, $n_week, $week)
             <div class="row start">
                 <section class="col-lg-5 col-md-7 col-sm-9">
                     <div class="donat_container">
-<!--                        <div class="donat">-->
-<!--                            <div class="donat_lable"> На оплату хостинга</div>-->
-<!--                            <form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">-->
-<!--                                <input type="hidden" name="receiver" value="410012002180482">-->
-<!--                                <input type="hidden" name="formcomment" value="Расписание Занятий">-->
-<!--                                <input type="hidden" name="short-dest" value="Расписание Занятий">-->
-<!--                                <input type="hidden" name="quickpay-form" value="donate">-->
-<!--                                <input type="hidden" name="targets" value="Пожертвование сайту Time-RTU.ru">-->
-<!--                                <input class="donat_input" type="number" name="sum" value="" data-type="number"-->
-<!--                                       placeholder="10 руб.">-->
-<!--                                <textarea class="donat_input" type="text" name="comment" value=""-->
-<!--                                          placeholder="Можете выразить пожелания или предложения!"></textarea>-->
-<!--                                <input type="hidden" name="need-fio" value="false">-->
-<!--                                <input type="hidden" name="need-email" value="false">-->
-<!--                                <input type="hidden" name="need-phone" value="false">-->
-<!--                                <input type="hidden" name="need-address" value="false">-->
-<!--                                <div class="d-flex flex-column">-->
-<!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="PC">Яндекс.Деньгами</label>-->
-<!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="AC">Банковской-->
-<!--                                        картой</label>-->
-<!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="MC">C-->
-<!--                                        баланса мобильного телефона</label>-->
-<!--                                </div>-->
-<!--                                <input class="donats_submit" type="submit" value="Перевести">-->
-<!--                            </form>-->
-<!--                        </div>-->
+                        <!--                        <div class="donat">-->
+                        <!--                            <div class="donat_lable"> На оплату хостинга</div>-->
+                        <!--                            <form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">-->
+                        <!--                                <input type="hidden" name="receiver" value="410012002180482">-->
+                        <!--                                <input type="hidden" name="formcomment" value="Расписание Занятий">-->
+                        <!--                                <input type="hidden" name="short-dest" value="Расписание Занятий">-->
+                        <!--                                <input type="hidden" name="quickpay-form" value="donate">-->
+                        <!--                                <input type="hidden" name="targets" value="Пожертвование сайту Time-RTU.ru">-->
+                        <!--                                <input class="donat_input" type="number" name="sum" value="" data-type="number"-->
+                        <!--                                       placeholder="10 руб.">-->
+                        <!--                                <textarea class="donat_input" type="text" name="comment" value=""-->
+                        <!--                                          placeholder="Можете выразить пожелания или предложения!"></textarea>-->
+                        <!--                                <input type="hidden" name="need-fio" value="false">-->
+                        <!--                                <input type="hidden" name="need-email" value="false">-->
+                        <!--                                <input type="hidden" name="need-phone" value="false">-->
+                        <!--                                <input type="hidden" name="need-address" value="false">-->
+                        <!--                                <div class="d-flex flex-column">-->
+                        <!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="PC">Яндекс.Деньгами</label>-->
+                        <!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="AC">Банковской-->
+                        <!--                                        картой</label>-->
+                        <!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="MC">C-->
+                        <!--                                        баланса мобильного телефона</label>-->
+                        <!--                                </div>-->
+                        <!--                                <input class="donats_submit" type="submit" value="Перевести">-->
+                        <!--                            </form>-->
+                        <!--                        </div>-->
                         <div class="feedback d-flex justify-content-center">
                             Для обратной связи: <a href="mailto:ya.slavar@yandex.ru">ya.slavar@yandex.ru</a>
                         </div>
@@ -180,6 +181,29 @@ function get_day_info($db, $gr, $day, $n_week, $week)
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-md-7 col-sm-9 col-7s start_week">
+                        <div class="message_box">
+                            <div id="day">
+                                <button type="button" class="close" id="close_message_box" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <div class="message_text">
+                                    Здравствуйте!
+                                    <br>
+                                    Совсем недавно на сайте произошла ошибка в связи с тем, что был исчерпан лимит
+                                    трафика заданный хостинг-провайдером.
+                                    <br>
+                                    Я не расчитывал, что этим сайтом будет пользоваться достаточно большое количество
+                                    людей (по данным Яндекс.Метрики ~600 пользователей в день).
+                                    <br>
+                                    В связи с этим я хотел бы узнать какое количество людей реально пользуется сайтом и
+                                    собрать небольшой фидбэк.
+                                    <br>
+                                    Если не трудно, заполните пожалуйта небольшую форму по <a
+                                            href="https://forms.gle/4zPKSxpwzgeerQ6s5">ссылке</a>.
+                                </div>
+
+                            </div>
+                        </div>
                         <div id="border_num_week">
                             <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
                         </div>
