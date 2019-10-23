@@ -1,13 +1,11 @@
+<? include('config.php'); ?>
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="cleartype" content="on">
-    <meta http-equiv="cache-control" content="no-cache">
-    <meta http-equiv="expires" content="0">
     <meta name="theme-color" content="#283593">
 
     <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
@@ -28,41 +26,16 @@
     <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
     <meta name="yandex-verification" content="6990c8ac978b974f"/>
-    <!-- Yandex.Metrika counter -->
+
     <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.ui.touch-punch.min.js"></script>
     <script type="text/javascript" src="lib/select2/select2.full.min.js"></script>
     <script type="text/javascript" src="lib/select2/ru.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/messageBoxController.js"></script>
-    <script type="text/javascript"> (function (d, w, c) {
-            (w[c] = w[c] || []).push(function () {
-                try {
-                    w.yaCounter50639506 = new Ya.Metrika2({
-                        id: 50639506,
-                        clickmap: true,
-                        trackLinks: true,
-                        accurateTrackBounce: true,
-                        webvisor: true,
-                        trackHash: true
-                    });
-                } catch (e) {
-                }
-            });
-            var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () {
-                n.parentNode.insertBefore(s, n);
-            };
-            s.type = "text/javascript";
-            s.async = true;
-            s.src = "https://mc.yandex.ru/metrika/tag.js";
-            if (w.opera == "[object Opera]") {
-                d.addEventListener("DOMContentLoaded", f, false);
-            } else {
-                f();
-            }
-        })(document, window, "yandex_metrika_callbacks2"); </script>
-    <noscript>
-        <div><img src="https://mc.yandex.ru/watch/50639506" style="position:absolute; left:-9999px;" alt=""/></div>
-    </noscript> <!-- /Yandex.Metrika counter -->
-    <title>Расписание Занятий</title>
+
+    <title><? echo($title); ?></title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -73,45 +46,69 @@
 <body>
 
 <?
-include('config.php');
 
 function get_day_info($db, $gr, $day, $n_week, $week)
 {
+    $item = array();
     $to_sql_group_name = str_replace("-", "_", $gr);
     $select = $db->query("SELECT * FROM $to_sql_group_name WHERE day = $day AND week = $n_week");
-    $item = '';
     while ($res = $select->fetchArray()) {
-        if ($res['exception'] != '') {
-            $res['exception'] = str_replace("'", "", $res['exception']);
-            $res['exception'] = explode(", ", $res['exception']);
-        }
-        if ($res['include'] != '') {
-            $res['include'] = str_replace("'", "", $res['include']);
-            $res['include'] = explode(", ", $res['include']);
-        }
-        if ($res["include"] == "" and $res["exception"] == "") {
-            $res["show"] = True;
-        }
-        if (is_array($res["include"])) {
-            if (in_array((string)$week, $res["include"], true)) {
-                $res["show"] = True;
-            }
-        }
-        if (is_array($res["exception"])) {
-
-            if (in_array((string)$week, $res["exception"], true)) {
-                $res["show"] = False;
-            } else {
-                $res["show"] = True;
-            }
-        }
-        if ($res["show"] != "") {
-            $item[$res['para']] = $res;
+        $result_array = result_fetch_array($res, $week);
+        if ($result_array["show"] != "") {
+            $item[$res['para']] = $result_array;
         }
     }
     return $item;
 }
 
+
+function get_all_info($db, $gr)
+{
+    $item_list = array();
+    $to_sql_group_name = str_replace("-", "_", $gr);
+    $select = $db->query("SELECT * FROM $to_sql_group_name");
+    for ($day = 1; $day < 8; $day++) {
+        for ($week = 1; $week < 3; $week++) {
+            $item_list[$day][$week] = array();
+        }
+    }
+    while ($res = $select->fetchArray()) {
+        array_push($item_list[$res['day']][$res['week']], $res);
+    }
+
+    return $item_list;
+}
+
+function result_fetch_array($res, $week)
+{
+
+    if ($res['exception'] != '') {
+        $res['exception'] = str_replace("'", "", $res['exception']);
+        $res['exception'] = explode(", ", $res['exception']);
+    }
+    if ($res['include'] != '') {
+        $res['include'] = str_replace("'", "", $res['include']);
+        $res['include'] = explode(", ", $res['include']);
+    }
+    if ($res["include"] == "" and $res["exception"] == "") {
+        $res["show"] = True;
+    }
+    if (is_array($res["include"])) {
+        if (in_array((string)$week, $res["include"], true)) {
+            $res["show"] = True;
+        }
+    }
+    if (is_array($res["exception"])) {
+
+        if (in_array((string)$week, $res["exception"], true)) {
+            $res["show"] = False;
+        } else {
+            $res["show"] = True;
+        }
+    }
+
+    return $res;
+}
 
 ?>
 
@@ -119,7 +116,7 @@ function get_day_info($db, $gr, $day, $n_week, $week)
     <div class="container">
         <div class="row">
             <div id="logo" class="col-lg">
-                Расписание РТУ МИРЭА
+                <? echo($title); ?>
             </div>
         </div>
     </div>
@@ -131,32 +128,6 @@ function get_day_info($db, $gr, $day, $n_week, $week)
             <div class="row start">
                 <section class="col-lg-5 col-md-7 col-sm-9">
                     <div class="donat_container">
-                        <!--                        <div class="donat">-->
-                        <!--                            <div class="donat_lable"> На оплату хостинга</div>-->
-                        <!--                            <form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">-->
-                        <!--                                <input type="hidden" name="receiver" value="410012002180482">-->
-                        <!--                                <input type="hidden" name="formcomment" value="Расписание Занятий">-->
-                        <!--                                <input type="hidden" name="short-dest" value="Расписание Занятий">-->
-                        <!--                                <input type="hidden" name="quickpay-form" value="donate">-->
-                        <!--                                <input type="hidden" name="targets" value="Пожертвование сайту Time-RTU.ru">-->
-                        <!--                                <input class="donat_input" type="number" name="sum" value="" data-type="number"-->
-                        <!--                                       placeholder="10 руб.">-->
-                        <!--                                <textarea class="donat_input" type="text" name="comment" value=""-->
-                        <!--                                          placeholder="Можете выразить пожелания или предложения!"></textarea>-->
-                        <!--                                <input type="hidden" name="need-fio" value="false">-->
-                        <!--                                <input type="hidden" name="need-email" value="false">-->
-                        <!--                                <input type="hidden" name="need-phone" value="false">-->
-                        <!--                                <input type="hidden" name="need-address" value="false">-->
-                        <!--                                <div class="d-flex flex-column">-->
-                        <!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="PC">Яндекс.Деньгами</label>-->
-                        <!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="AC">Банковской-->
-                        <!--                                        картой</label>-->
-                        <!--                                    <label><input class="radio_bottom" type="radio" name="paymentType" value="MC">C-->
-                        <!--                                        баланса мобильного телефона</label>-->
-                        <!--                                </div>-->
-                        <!--                                <input class="donats_submit" type="submit" value="Перевести">-->
-                        <!--                            </form>-->
-                        <!--                        </div>-->
                         <div class="feedback d-flex justify-content-center">
                             Для обратной связи: <a href="mailto:ya.slavar@yandex.ru">ya.slavar@yandex.ru</a>
                         </div>
@@ -165,8 +136,8 @@ function get_day_info($db, $gr, $day, $n_week, $week)
                 <div class="col-lg-6 col-md-8 col-sm-10 none-group d-flex justify-content-center align-items-center">
                     <div>
                         Добро пожаловать на сайт!
-
-                        Пожалуйста, выберите Вашу учебную группу:
+                        <br>
+                        Пожалуйста, выберите Вашу учебную группу.
                     </div>
                 </div>
             </div>
@@ -181,29 +152,6 @@ function get_day_info($db, $gr, $day, $n_week, $week)
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-md-7 col-sm-9 col-7s start_week">
-                        <div class="message_box">
-                            <div id="day">
-                                <button type="button" class="close" id="close_message_box" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <div class="message_text">
-                                    Здравствуйте!
-                                    <br>
-                                    Совсем недавно на сайте произошла ошибка в связи с тем, что был исчерпан лимит
-                                    трафика заданный хостинг-провайдером.
-                                    <br>
-                                    Я не расчитывал, что этим сайтом будет пользоваться достаточно большое количество
-                                    людей (по данным Яндекс.Метрики ~600 пользователей в день).
-                                    <br>
-                                    В связи с этим я хотел бы узнать какое количество людей реально пользуется сайтом и
-                                    собрать небольшой фидбэк.
-                                    <br>
-                                    Если не трудно, заполните пожалуйта небольшую форму по <a
-                                            href="https://forms.gle/4zPKSxpwzgeerQ6s5">ссылке</a>.
-                                </div>
-
-                            </div>
-                        </div>
                         <div id="border_num_week">
                             <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
                         </div>
@@ -243,7 +191,7 @@ function get_day_info($db, $gr, $day, $n_week, $week)
                                 $item = get_day_info($db, $gr, $day, $n_week, $week);
                                 ?>
                                 <div id="day">
-                                    <? if ($item == '') {
+                                    <? if ($item == array()) {
                                         echo('<div id="sun">Выходной</div>');
                                     } else {
                                         ?>
@@ -301,32 +249,6 @@ function get_day_info($db, $gr, $day, $n_week, $week)
 
                     <section class="col-lg-5 col-md-7 col-sm-9">
                         <div class="donat_container">
-                            <!--                            <div class="donat">-->
-                            <!--                                <div class="donat_lable"> На оплату хостинга</div>-->
-                            <!--                                <form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">-->
-                            <!--                                    <input type="hidden" name="receiver" value="410012002180482">-->
-                            <!--                                    <input type="hidden" name="formcomment" value="Расписание Занятий">-->
-                            <!--                                    <input type="hidden" name="short-dest" value="Расписание Занятий">-->
-                            <!--                                    <input type="hidden" name="quickpay-form" value="donate">-->
-                            <!--                                    <input type="hidden" name="targets" value="Пожертвование сайту Time-RTU.ru">-->
-                            <!--                                    <input class="donat_input" type="number" name="sum" value="" data-type="number"-->
-                            <!--                                           placeholder="10 руб.">-->
-                            <!--                                    <textarea class="donat_input" type="text" name="comment" value=""-->
-                            <!--                                              placeholder="Можете выразить пожелания или предложения!"></textarea>-->
-                            <!--                                    <input type="hidden" name="need-fio" value="false">-->
-                            <!--                                    <input type="hidden" name="need-email" value="false">-->
-                            <!--                                    <input type="hidden" name="need-phone" value="false">-->
-                            <!--                                    <input type="hidden" name="need-address" value="false">-->
-                            <!--                                    <div class="d-flex flex-column">-->
-                            <!--                                        <label><input class="radio_bottom" type="radio" name="paymentType" value="PC">Яндекс.Деньгами</label>-->
-                            <!--                                        <label><input class="radio_bottom" type="radio" name="paymentType" value="AC">Банковской-->
-                            <!--                                            картой</label>-->
-                            <!--                                        <label><input class="radio_bottom" type="radio" name="paymentType" value="MC">C-->
-                            <!--                                            баланса мобильного телефона</label>-->
-                            <!--                                    </div>-->
-                            <!--                                    <input class="donats_submit" type="submit" value="Перевести">-->
-                            <!--                                </form>-->
-                            <!--                            </div>-->
                             <div class="feedback d-flex justify-content-center">
                                 Для обратной связи: <a href="mailto:ya.slavar@yandex.ru">ya.slavar@yandex.ru</a>
                             </div>
@@ -335,24 +257,33 @@ function get_day_info($db, $gr, $day, $n_week, $week)
                 </div>
             </div>
         <? } else { ?>
+            <? $list_info = get_all_info($db, $gr); ?>
             <div class="cards_table container-fluid">
-                <div class="">
+                <div class="work_zone">
                     <? $today = date('Y-m-d'); ?>
+
                     <? for ($days = 1; $days < 8; $days++) { ?>
                         <div class="one_day">
                             <?
                             $temp_date = $start_day;
-                            for ($week = 1; $week < 18 + 1; $week++) {
+                            for ($week = 1; $week < $semestr_week_count + 1; $week++) {
                                 if ($week % 2 == 0) {
                                     $n_week = 2;
                                 } else {
                                     $n_week = 1;
                                 }
-                                $item = get_day_info($db, $gr, $days, $n_week, $week);
+
+//                                print_r($list_info);
+                                $item = array();
+                                foreach( $list_info[$days][$n_week] as $res){
+                                    $result_array = result_fetch_array($res, $week);
+                                    if ($result_array["show"] != "") {
+                                        $item[$res['para']] = $result_array;
+                                    }
+                                }
                                 ?>
 
                                 <div id="card">
-
                                     <div id="date">
                                         <? if ($days == 1) { ?>
                                             <div class="num_week">
@@ -368,15 +299,14 @@ function get_day_info($db, $gr, $day, $n_week, $week)
                                     </div>
                                     <? if ($temp_date == $today) {
                                         echo '<a name="today"></a>';
-                                    }
-                                    ?>
+                                    } ?>
+
                                     <div id="day" <? if ($temp_date == $today) {
                                         echo 'style="box-shadow: 0px 1px 15px 0px #ff1700;"';
                                     } ?>>
-                                        <? if ($item == '') {
+                                        <? if ($item == array()) {
                                             echo('<div id="sun">Выходной</div>');
-                                        } else {
-                                            ?>
+                                        } else { ?>
                                             <table cellspacing="0" id="maket">
                                                 <? for ($para = 1; $para < 8; $para++) { ?>
                                                     <tr>
@@ -437,6 +367,30 @@ function get_day_info($db, $gr, $day, $n_week, $week)
     } ?>
 </section>
 
+<? if ($_GET['view'] === 'table') {?>
+    <div class="zoom_bottoms fix-middle-right padding-right-20">
+        <button id="zoom_plus" class="btn-light light_bottom round_bottom-50">
+            <svg class="btn_icon_blue" xmlns="http://www.w3.org/2000/svg" fill="white" width="30" height="30"
+                 viewBox="0 0 24 24">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#3f51b5"></path>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+            </svg>
+        </button>
+        <button id="zoom_minus" class="btn-light light_bottom round_bottom-50">
+            <svg class="btn_icon_blue" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 8 24 24">
+                <path d="M6 19h12v2H6z" fill="#3f51b5"></path>
+                <path fill="none" d="M0 0h24v24H0V0z"></path>
+            </svg>
+        </button>
+        <button id="undo_zoom" class="btn-light light_bottom round_bottom-50">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z" fill="#3f51b5"></path>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+            </svg>
+        </button>
+    </div>
+<?} ?>
+
 <footer class="bottoms fixed-bottom">
     <div class="container d-flex justify-content-end">
         <form action="" method="get" name="select_group">
@@ -489,14 +443,35 @@ function get_day_info($db, $gr, $day, $n_week, $week)
     </div>
 </footer>
 
+
 <script>
     $(document).ready(function () {
+
+        let cards_table = $('.work_zone');
+
+        cards_table.draggable();
+
         $("#select").select2({
             'width': '185px',
             'language': 'ru'
         });
+
+        $('#zoom_plus').click(function () {
+            zoom_element(cards_table, 1, 0.1, 200);
+        });
+
+        $('#zoom_minus').click(function () {
+            zoom_element(cards_table, -1, 0.1, 200);
+        });
+
+        $('#undo_zoom').click(function () {
+            undo_zoom(cards_table);
+        });
+
     });
 </script>
+
+<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(50639506, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/50639506" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
 
 </body>
 </html>
