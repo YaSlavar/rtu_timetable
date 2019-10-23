@@ -33,7 +33,6 @@
     <script type="text/javascript" src="lib/select2/select2.full.min.js"></script>
     <script type="text/javascript" src="lib/select2/ru.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/messageBoxController.js"></script>
 
     <title><? echo($title); ?></title>
 
@@ -155,7 +154,6 @@ function result_fetch_array($res, $week)
                         <div id="border_num_week">
                             <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
                         </div>
-
                         <?
                         for ($days = 1; $days < 25; $days++) {
                             $week = (date("W", strtotime($today))) - $delta;
@@ -165,26 +163,20 @@ function result_fetch_array($res, $week)
                                 $n_week = 1;
                             }
                             $day = strftime("%w", strtotime($today));
-                            ?>
 
-                            <?
                             $today_date = date('Y-m-d');
-                            if ($day == 1 and $today != $today_date) {
-                                ?>
+                            if ($day == 1 and $today != $today_date) { ?>
                                 <div id="border_num_week">
                                     <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
                                 </div>
-                                <?
-                            } ?>
+                            <? } ?>
 
                             <div id="card">
                                 <div id="date">
                                     <?
                                     echo get_today_name($days);
                                     echo get_day_name($day);
-                                    echo("(");
-                                    echo(strftime("%d.%m.%Y", strtotime($today)));
-                                    echo(")");
+                                    echo("(" . strftime("%d.%m.%Y", strtotime($today)) . ")");
                                     ?>
                                 </div>
                                 <?
@@ -194,51 +186,8 @@ function result_fetch_array($res, $week)
                                     <? if ($item == array()) {
                                         echo('<div id="sun">Выходной</div>');
                                     } else {
-                                        ?>
-                                        <table cellspacing="0" id="maket">
-                                            <? for ($para = 1; $para < 8; $para++) { ?>
-                                                <tr>
-                                                    <td id="time">
-                                                        <? echo get_para_time($para); ?>
-                                                    </td>
-                                                    <td id="lesson">
-                                                        <div id="dist">
-                                                            <?
-                                                            if ($item[$para]['except'] != 'False' and $item[$para]['include'] != 'False' or ($item[$para]['except'] == '' and $item[$para]['include'] == '')) {
-                                                                echo($item[$para]['name']);
-                                                            }
-                                                            if ($item[$para]['name'] == '') {
-                                                                echo "<div class='none'>- - - - - - - - - - - - - - - - - - - - - - -</div>";
-                                                            }
-                                                            ?>
-                                                        </div>
-                                                        <div id="aud">
-                                                            <?
-                                                            if ($item[$para]['except'] != 'False' and $item[$para]['include'] != 'False' or ($item[$para]['except'] == '' and $item[$para]['include'] == '')) {
-                                                                if ($item[$para]['name'] != '') {
-                                                                    echo('ауд.' . $item[$para]['room']);
-                                                                    if ($item[$para]['type'] != '') {
-                                                                        echo('  ( ' . $item[$para]['type'] . ' )');
-                                                                    }
-                                                                }
-                                                            }
-                                                            ?>
-                                                        </div>
-                                                        <div id="prepod">
-                                                            <?
-                                                            if ($item[$para]['except'] != 'False' and $item[$para]['include'] != 'False' or ($item[$para]['except'] == '' and $item[$para]['include'] == '')) {
-                                                                echo($item[$para]['prepod']);
-                                                            }
-                                                            ?>
-                                                        </div>
-                                                        <? if ($para < 6 and $item['dist'] == "") { ?>
-                                                            <div id="border"></div>
-                                                        <? } ?>
-                                                    </td>
-                                                </tr>
-                                            <? } ?>
-                                        </table>
-                                    <? } ?>
+                                        include('day_table.php');
+                                    } ?>
                                 </div>
                             </div>
 
@@ -246,7 +195,6 @@ function result_fetch_array($res, $week)
                         }
                         ?>
                     </div>
-
                     <section class="col-lg-5 col-md-7 col-sm-9">
                         <div class="donat_container">
                             <div class="feedback d-flex justify-content-center">
@@ -273,9 +221,8 @@ function result_fetch_array($res, $week)
                                     $n_week = 1;
                                 }
 
-//                                print_r($list_info);
                                 $item = array();
-                                foreach( $list_info[$days][$n_week] as $res){
+                                foreach ($list_info[$days][$n_week] as $res) {
                                     $result_array = result_fetch_array($res, $week);
                                     if ($result_array["show"] != "") {
                                         $item[$res['para']] = $result_array;
@@ -301,56 +248,15 @@ function result_fetch_array($res, $week)
                                         echo '<a name="today"></a>';
                                     } ?>
 
-                                    <div id="day" <? if ($temp_date == $today) {
-                                        echo 'style="box-shadow: 0px 1px 15px 0px #ff1700;"';
-                                    } ?>>
+                                    <div id="day"
+                                        <? if ($temp_date == $today) {
+                                            echo 'style="box-shadow: 0px 1px 15px 0px #ff1700;"';
+                                        } ?>>
                                         <? if ($item == array()) {
                                             echo('<div id="sun">Выходной</div>');
-                                        } else { ?>
-                                            <table cellspacing="0" id="maket">
-                                                <? for ($para = 1; $para < 8; $para++) { ?>
-                                                    <tr>
-                                                        <td id="time">
-                                                            <? echo get_para_time($para); ?>
-                                                        </td>
-                                                        <td id="lesson">
-                                                            <div id="dist">
-                                                                <?
-                                                                if ($item[$para]['except'] != 'False' and $item[$para]['include'] != 'False' or ($item[$para]['except'] == '' and $item[$para]['include'] == '')) {
-                                                                    echo($item[$para]['name']);
-                                                                }
-                                                                if ($item[$para]['name'] == '') {
-                                                                    echo "<div class='none'>- - - - - - - - - - - - - - - - - - - - - -</div>";
-                                                                }
-                                                                ?>
-                                                            </div>
-                                                            <div id="aud">
-                                                                <?
-                                                                if ($item[$para]['except'] != 'False' and $item[$para]['include'] != 'False' or ($item[$para]['except'] == '' and $item[$para]['include'] == '')) {
-                                                                    if ($item[$para]['name'] != '') {
-                                                                        echo('ауд.' . $item[$para]['room']);
-                                                                        if ($item[$para]['type'] != '') {
-                                                                            echo('  ( ' . $item[$para]['type'] . ' )');
-                                                                        }
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </div>
-                                                            <div id="prepod">
-                                                                <?
-                                                                if ($item[$para]['except'] != 'False' and $item[$para]['include'] != 'False' or ($item[$para]['except'] == '' and $item[$para]['include'] == '')) {
-                                                                    echo($item[$para]['prepod']);
-                                                                }
-                                                                ?>
-                                                            </div>
-                                                            <? if ($para < 6 and $item['dist'] == "") { ?>
-                                                                <div id="border"></div>
-                                                            <? } ?>
-                                                        </td>
-                                                    </tr>
-                                                <? } ?>
-                                            </table>
-                                        <? } ?>
+                                        } else {
+                                            include('day_table.php');
+                                        } ?>
                                     </div>
                                 </div>
 
@@ -367,7 +273,7 @@ function result_fetch_array($res, $week)
     } ?>
 </section>
 
-<? if ($_GET['view'] === 'table') {?>
+<? if ($_GET['view'] === 'table') { ?>
     <div class="zoom_bottoms fix-middle-right padding-right-20">
         <button id="zoom_plus" class="btn-light light_bottom round_bottom-50">
             <svg class="btn_icon_blue" xmlns="http://www.w3.org/2000/svg" fill="white" width="30" height="30"
@@ -384,12 +290,13 @@ function result_fetch_array($res, $week)
         </button>
         <button id="undo_zoom" class="btn-light light_bottom round_bottom-50">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z" fill="#3f51b5"></path>
+                <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"
+                      fill="#3f51b5"></path>
                 <path d="M0 0h24v24H0z" fill="none"></path>
             </svg>
         </button>
     </div>
-<?} ?>
+<? } ?>
 
 <footer class="bottoms fixed-bottom">
     <div class="container d-flex justify-content-end">
@@ -447,9 +354,9 @@ function result_fetch_array($res, $week)
 <script>
     $(document).ready(function () {
 
-        let cards_table = $('.work_zone');
+        let work_zone = $('.work_zone');
 
-        cards_table.draggable();
+        work_zone.draggable();
 
         $("#select").select2({
             'width': '185px',
@@ -457,21 +364,32 @@ function result_fetch_array($res, $week)
         });
 
         $('#zoom_plus').click(function () {
-            zoom_element(cards_table, 1, 0.1, 200);
+            zoom_element(work_zone, 1, 0.1, 200);
         });
 
         $('#zoom_minus').click(function () {
-            zoom_element(cards_table, -1, 0.1, 200);
+            zoom_element(work_zone, -1, 0.1, 200);
         });
 
         $('#undo_zoom').click(function () {
-            undo_zoom(cards_table);
+            undo_zoom(work_zone);
         });
 
     });
 </script>
 
-<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(50639506, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/50639506" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript"> (function (m, e, t, r, i, k, a) {
+        m[i] = m[i] || function () {
+            (m[i].a = m[i].a || []).push(arguments)
+        };
+        m[i].l = 1 * new Date();
+        k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    ym(50639506, "init", {clickmap: true, trackLinks: true, accurateTrackBounce: true, trackHash: true}); </script>
+<noscript>
+    <div><img src="https://mc.yandex.ru/watch/50639506" style="position:absolute; left:-9999px;" alt=""/></div>
+</noscript> <!-- /Yandex.Metrika counter -->
 
 </body>
 </html>
