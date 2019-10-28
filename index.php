@@ -39,7 +39,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="lib/select2/select2.css?version=2">
-    <link rel="stylesheet" href="css/main.css?version=21">
+    <link rel="stylesheet" href="css/main.css?version=25">
 
 </head>
 <body>
@@ -76,6 +76,21 @@ function get_all_info($db, $gr)
     }
 
     return $item_list;
+}
+
+function get_max_para_count($item_list)
+{
+    $para_count = 6;
+    foreach ($item_list as $day) {
+        foreach ($day as $week) {
+            foreach ($week as $para) {
+                if ($para['para'] > $para_count) {
+                    $para_count = $para['para'];
+                }
+            }
+        }
+    }
+    return $para_count;
 }
 
 function result_fetch_array($res, $week)
@@ -144,6 +159,8 @@ function result_fetch_array($res, $week)
         <?
     } else {
         $gr = $_GET['group'];
+
+        $max_para_count = get_max_para_count(get_all_info($db, $gr));
 
         if ($_GET['view'] !== 'table') {
             $today = date('Y-m-d');

@@ -1,10 +1,19 @@
-<?global $item;?>
+<?
+global $item;
+global $max_para_count;
+?>
 
 <table id="maket">
-    <? for ($para = 1; $para < 8; $para++) { ?>
+    <? for ($para = 1; $para < $max_para_count + 1; $para++) { ?>
         <tr>
             <td id="time">
-                <? echo get_para_time($para); ?>
+                <?
+                if ($item[$para]['time'] != "") {
+                    echo $item[$para]['time'];
+                } else {
+                    echo get_para_time($para);
+                }
+                ?>
             </td>
             <td id="lesson">
                 <div id="dist">
@@ -36,7 +45,7 @@
                     }
                     ?>
                 </div>
-                <? if ($para < 7 and $item['dist'] == "") { ?>
+                <? if ($para < $max_para_count and $item['dist'] == "") { ?>
                     <div id="border"></div>
                 <? } ?>
             </td>

@@ -18,7 +18,8 @@ $etalon_group = "БНБО-02-16"; # Группа отображаемая по �
 
 $semestr_week_count = 16;
 
-function get_today_name($days){
+function get_today_name($days)
+{
     switch ($days) {
         case 1:
             return "Сегодня:  ";
@@ -32,7 +33,8 @@ function get_today_name($days){
     }
 }
 
-function get_day_name($day){
+function get_day_name($day)
+{
     switch ($day) {
         case 1:
             return "Понедельник";
@@ -59,7 +61,8 @@ function get_day_name($day){
     }
 }
 
-function get_para_time($para){
+function get_para_time($para)
+{
     switch ($para) {
         case 1:
             return "9:00";
@@ -81,6 +84,9 @@ function get_para_time($para){
             break;
         case 7:
             return "19:50";
+            break;
+        case 8:
+            return "20:10";
             break;
     }
 }
