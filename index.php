@@ -33,6 +33,7 @@
     <script type="text/javascript" src="lib/select2/select2.full.min.js"></script>
     <script type="text/javascript" src="lib/select2/ru.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/messageBoxController.js"></script>
 
     <title><? echo($title); ?></title>
 
@@ -168,6 +169,39 @@ function result_fetch_array($res, $week)
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-md-7 col-sm-9 col-7s start_week">
+                        <div class="message_box">
+                            <div id="day">
+                                <button type="button" class="close" id="close_message_box" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <div class="message_text">
+                                    <p>Здравствуйте!</p>
+                                    <p>
+                                        В конце сентября на сайте произошла ошибка в связи с тем, что был исчерпан лимит
+                                        трафика заданный хостинг-провайдером.
+                                    </p>
+                                    <p>
+                                        Я не расчитывал, что у этого сайта будет такое большое количество посетителей
+                                        <br>
+                                        (по данным Яндекс.Метрики ~500 пользователей в день).
+                                    </p>
+                                    <p>
+                                        В связи с этим я хотел бы узнать какое количество людей реально пользуется сайтом,
+                                        и получить обратную связь (пожелания, предложения по дальнейшей работе сайта).
+                                    </p>
+                                    <p>
+                                        Если не трудно, заполните пожалуйта небольшую форму по
+                                        <a href="https://forms.gle/4zPKSxpwzgeerQ6s5">ссылке</a>.
+                                        <br>
+                                        --------
+                                        <br>
+                                        С уважением, Вячеслав.
+                                    </p>
+
+                                </div>
+
+                            </div>
+                        </div>
                         <div id="border_num_week">
                             <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
                         </div>
