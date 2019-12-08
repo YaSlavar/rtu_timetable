@@ -33,23 +33,23 @@ include "functions.php";
     <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="lib/jquery.ui.touch-punch.min.js"></script>
-    <script type="text/javascript" src="lib/select2/select2.full.min.js"></script>
-    <script type="text/javascript" src="lib/select2/ru.js"></script>
-    <script type="text/javascript" src="js/messageBoxController.js"></script>
-    <script type="text/javascript" src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="lib/bootstrap-datepicker/locales/bootstrap-datepicker.ru.min.js"></script>
+    <script type="text/javascript" src="lib/select2/select2.full.min.js?version=<?echo $version;?>"></script>
+    <script type="text/javascript" src="lib/select2/ru.js?version=<?echo $version;?>"></script>
+    <script type="text/javascript" src="js/messageBoxController.js?version=<?echo $version;?>"></script>
+    <script type="text/javascript" src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js?version=<?echo $version;?>"></script>
+    <script type="text/javascript" src="lib/bootstrap-datepicker/locales/bootstrap-datepicker.ru.min.js?version=<?echo $version;?>"></script>
 
-    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/main.js?version=<?echo $version;?>"></script>
 
     <title><? echo($title); ?></title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="lib/select2/select2.css?version=2">
+    <link rel="stylesheet" href="lib/select2/select2.css?version=<?echo $version;?>">
 
-    <link rel="stylesheet" href="lib/bootstrap-datepicker/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="lib/bootstrap-datepicker/css/bootstrap-datepicker.css?version=<?echo $version;?>">
 
-    <link rel="stylesheet" href="css/main.css?version=25">
+    <link rel="stylesheet" href="css/main.css?version=<?echo $version;?>">
 
 </head>
 <body>
@@ -58,7 +58,7 @@ include "functions.php";
     <div class="container">
         <div class="row">
             <div id="logo" class="col-lg">
-                <? echo($title); ?>
+                <a class="logo" href="index.php"><? echo($title); ?></a>
             </div>
         </div>
     </div>
@@ -100,7 +100,8 @@ include "functions.php";
         $max_para_count = get_max_para_count(get_all_info($db, $gr));
 
         if ($_GET['view'] !== 'table') {
-            $today = date('Y-m-d');
+
+            $date = date("Y-m-d", strtotime($start_day));
             ?>
             <div class="container">
                 <div class="row">
@@ -139,32 +140,29 @@ include "functions.php";
 
                             </div>
                         </div>
-                        <div id="border_num_week">
-                            <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
-                        </div>
                         <?
-                        for ($days = 1; $days < 50; $days++) {
-                            $week = (date("W", strtotime($today))) - $delta;
+                        for ($days = 1; $days < $semestr_day_count + 1; $days++) {
+                            $week = (date("W", strtotime($date))) - $delta;
                             if ($week % 2 == 0) {
                                 $n_week = 2;
                             } else {
                                 $n_week = 1;
                             }
-                            $day = strftime("%w", strtotime($today));
+                            $day = strftime("%w", strtotime($date));
 
                             $today_date = date('Y-m-d');
-                            if ($day == 1 and $today != $today_date) { ?>
+                            if ($day == 1 and $date != $today_date) { ?>
                                 <div id="border_num_week">
-                                    <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
+                                    <div id="num_week"><? echo((date("W", strtotime($date)) - $delta) . ' неделя'); ?></div>
                                 </div>
                             <? } ?>
                             <div id="card">
-                                <a name="<? echo(strftime("%d.%m.%Y", strtotime($today))); ?>"></a>
+                                <a name="<? echo(strftime("%d.%m.%Y", strtotime($date))); ?>"></a>
                                 <div id="date">
                                     <?
                                     echo get_today_name($days);
                                     echo get_day_name($day);
-                                    echo("(" . strftime("%d.%m.%Y", strtotime($today)) . ")");
+                                    echo("(" . strftime("%d.%m.%Y", strtotime($date)) . ")");
                                     ?>
                                 </div>
                                 <?
@@ -179,11 +177,11 @@ include "functions.php";
                                 </div>
                             </div>
 
-                            <? $today = date("Y-m-d", strtotime($today) + 86400);
+                            <? $date = date("Y-m-d", strtotime($date) + 86400);
                         }
                         ?>
                     </div>
-                    <section class="col-lg-5 col-md-5 col-sm-9">
+                    <section class="col-lg-5 col-md-7 col-sm-9 col-7s start_week">
                         <div class="donat_container">
                             <div class="calendar day d-flex justify-content-center">
 
@@ -343,7 +341,11 @@ include "functions.php";
 
 
 <script>
+
     $(document).ready(function () {
+
+        location.href = "#" + formatDate(new Date);
+        location.hash = formatDate(new Date);
 
         $('.calendar').datepicker({
             format: "dd.mm.yyyy",
