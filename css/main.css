@@ -3,6 +3,7 @@
     font-family: Roboto-Light;
     src: url(Roboto-Light.ttf);
 }
+
 @font-face {
     font-family: Roboto-Regular;
     src: url(Roboto-Regular.ttf);
@@ -12,8 +13,7 @@
     padding-right: 20px;
 }
 
-
-body{
+body {
     -ms-user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -24,33 +24,52 @@ body{
 
 /* HEADER*/
 
-div#logo{
+div#logo {
     font-size: 1.5em;
     color: white;
     padding: 5px 0 8px 15px;
 }
 
-.logo, .logo:hover{
+.logo, .logo:hover {
     color: white;
 }
 
-.header{
+.header {
     background-color: #3f51b5;
     box-shadow: 0 1px 20px 0px #bdbdbd;
     z-index: 999;
 }
 
-/*CARDS*/
-.message_box{
+#calendar_button {
     display: none;
 }
 
-.message_text{
+.calendar-icon {
+    border-radius: 30px;
+}
+
+.calendar-icon:hover {
+    background: #007bff;
+}
+
+.top_calendar {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 15px;
+}
+
+/*CARDS*/
+.message_box {
+    display: none;
+}
+
+.message_text {
     font-size: 1.1em;
     /*color: #3f51b5;*/
 }
 
-.none-group{
+.none-group {
     text-align: center;
     color: #3f51b5;
     font-size: 1.5em;
@@ -58,21 +77,22 @@ div#logo{
     margin-top: 25px;
     vertical-align: middle;
 }
-.start .donat_container{
+
+.start .donat_container {
     margin-bottom: 0;
 }
 
-.start_week{
+.start_week {
     z-index: 1;
     min-width: 400px;
 }
 
-div#border_num_week{
-    margin: 0 0  15px 0;
+div#border_num_week {
+    margin: 0 0 15px 0;
     border-bottom: 1px solid #0000005e;
 }
 
-div#num_week{
+div#num_week {
     width: 130px;
     margin: 0 auto -15px auto;
     text-align: center;
@@ -82,23 +102,25 @@ div#num_week{
     color: #000000;
 }
 
-.cards{
+.cards {
     min-width: 300px;
     position: relative;
     margin-top: 65px;
 }
+
 #maket {
     width: 100%; /* Ширина всей таблицы */
     line-height: normal;
 }
-div#date{
+
+div#date {
     font-size: 1.2em;
     padding: 70px 0 0 5px;
     margin-top: -60px;
 }
 
-div#day{
-    background-color:white;
+div#day {
+    background-color: white;
     box-shadow: 0px 3px 6px 1px #bdbdbd59;
     border-radius: 10px;
     margin-top: 10px;
@@ -113,56 +135,59 @@ TD {
 TD#time {
     width: 50px;
     font-size: 1.1em;
-    color:red;
+    color: red;
     padding: 5px 15px 5px 5px;
 }
-TD#lesson{
-    padding: 5px 0 0 0 ;
+
+TD#lesson {
+    padding: 5px 0 0 0;
 }
-div#dist{
+
+div#dist {
     min-height: 27px;
     font-size: 1.1em;
 }
-div#aud{
-    color:green;
+
+div#aud {
+    color: green;
     font-size: 1em;
 }
-div#prepod{
+
+div#prepod {
     font-size: 0.9em;
 }
+
 div#border {
     margin: 5px 10px 0px -5px;
     border-bottom: 1px solid #e0e0e5b8;
 }
-div#sun{
+
+div#sun {
     font-size: 1em;
     text-align: center;
 }
-.donat_container{
+
+.donat_container {
     margin-bottom: 110px;
     position: fixed;
 }
 
-@media (max-width: 768px) {
-    .donat_container{
-        position: relative;
-    }
-}
-
-.donat{
-    background-color:white;
+.donat {
+    background-color: white;
     box-shadow: 0 3px 6px 1px #bdbdbd59;
     border-radius: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 20px;
 }
-.donat_lable{
+
+.donat_lable {
     font-size: 1.5em;
     color: #3f51b5;
     margin-bottom: 10px;
 }
-.donat_input{
+
+.donat_input {
     width: 100%;
     margin-bottom: 10px;
     border: solid 1px #bdbdbd87;
@@ -171,14 +196,16 @@ div#sun{
     resize: none;
     outline: none;
 }
-.radio_bottom{
+
+.radio_bottom {
     width: 16px;
     height: 16px;
     outline: none;
     margin: 0 10px 0 5px;
     background-color: #aaa;
 }
-.donats_submit{
+
+.donats_submit {
     height: 40px;
     width: 120px;
     border-radius: 80px;
@@ -188,52 +215,65 @@ div#sun{
     border: none;
     margin-top: 10px;
 }
-.feedback{
+
+.calendar {
+    display: flex;
+}
+
+.feedback {
     color: #939393;
 }
 
 /*TABLE*/
-.work_zone{
+.work_zone {
     position: fixed;
     cursor: move;
 }
 
-.cards_table{
+.cards_table {
     overflow: auto;
 }
-.one_day{
+
+.one_day {
     display: inline-flex;
 }
-.one_day #card{
+
+.one_day #card {
     font-size: 0.5em;
     margin-right: 15px;
 }
-.num_week{
+
+.num_week {
     font-size: 1.5em;
 }
-.one_day #card #day{
+
+.one_day #card #day {
     width: 150px;
     white-space: nowrap;
     overflow: hidden;
     padding: 5px 5px 10px;
 }
-.one_day #card #day TD#lesson #dist{
-     min-height: auto;
+
+.one_day #card #day TD#lesson #dist {
+    min-height: auto;
 }
-.one_day #card #day TD#time{
+
+.one_day #card #day TD#time {
     width: 32px;
 }
-.one_day #card #day TD#lesson{
+
+.one_day #card #day TD#lesson {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.one_day #card #day table#maket{
-     table-layout: fixed;
+
+.one_day #card #day table#maket {
+    table-layout: fixed;
 
 }
 
 /* CALENDAR */
-.datepicker{
+.datepicker {
     background: white;
     box-shadow: 0px 3px 6px 1px #bdbdbd59;
     border-radius: 10px;
@@ -252,15 +292,16 @@ div#sun{
 
 /*BOTTOMS*/
 div#bottom_gr {
-    float:right;
-    bottom:46px;
-    right:215px;
+    float: right;
+    bottom: 46px;
+    right: 215px;
     height: 65px;
     width: 65px;
     border-radius: 80px;
     background-color: #3f51b5;
     z-index: 9999;
 }
+
 #bg {
     display: inline-flex;
     justify-content: flex-end;
@@ -288,6 +329,7 @@ div#bottom_gr {
     text-align-last: center;
     padding: 0 0 0 20px;
 }
+
 .bottom {
     position: relative;
     top: 2px;
@@ -300,19 +342,20 @@ div#bottom_gr {
     margin-left: 10px;
 }
 
-.group_container{
+.group_container {
     /*position: relative;*/
     /*left: 10px;*/
 }
 
-#group_submit{
+#group_submit {
     outline: none;
     border: none;
     background: rgba(0, 0, 0, 0) url(send.svg);
     height: 65px;
     width: 65px;
 }
-.bottoms{
+
+.bottoms {
     padding-bottom: 20px;
 }
 
@@ -364,4 +407,23 @@ div#bottom_gr {
 
 #undo_zoom {
     display: none;
+}
+
+
+@media (max-width: 767.98px) {
+    .donat_container {
+        position: relative;
+    }
+
+    .calendar {
+        display: none;
+    }
+
+    .top_calendar {
+        display: none;
+    }
+
+    #calendar_button {
+        display: block;
+    }
 }

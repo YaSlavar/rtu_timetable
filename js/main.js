@@ -3,7 +3,7 @@ let ZOOM_DELTA = 1;
 function zoom_element(element, delta, zoom_delta = 0.05, animate_speed = 1) {
     let undo_zoom_button = $('#undo_zoom');
 
-    if (typeof(delta) !== "number") {
+    if (typeof (delta) !== "number") {
         delta = delta.deltaY * delta.deltaFactor;
     }
 
@@ -53,7 +53,7 @@ function setCookie(name, value, set_sec) {
 function formatDate(date) {
 
     function padNum(num) {
-        return num.toString().padStart(2,'0');
+        return num.toString().padStart(2, '0');
     }
 
     let day = padNum(date.getDate());

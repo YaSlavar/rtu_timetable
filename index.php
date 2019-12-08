@@ -33,33 +33,44 @@ include "functions.php";
     <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="lib/jquery.ui.touch-punch.min.js"></script>
-    <script type="text/javascript" src="lib/select2/select2.full.min.js?version=<?echo $version;?>"></script>
-    <script type="text/javascript" src="lib/select2/ru.js?version=<?echo $version;?>"></script>
-    <script type="text/javascript" src="js/messageBoxController.js?version=<?echo $version;?>"></script>
-    <script type="text/javascript" src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js?version=<?echo $version;?>"></script>
-    <script type="text/javascript" src="lib/bootstrap-datepicker/locales/bootstrap-datepicker.ru.min.js?version=<?echo $version;?>"></script>
+    <script type="text/javascript" src="lib/select2/select2.full.min.js?version=<? echo $version; ?>"></script>
+    <script type="text/javascript" src="lib/select2/ru.js?version=<? echo $version; ?>"></script>
+    <script type="text/javascript" src="js/messageBoxController.js?version=<? echo $version; ?>"></script>
+    <script type="text/javascript"
+            src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js?version=<? echo $version; ?>"></script>
+    <script type="text/javascript"
+            src="lib/bootstrap-datepicker/locales/bootstrap-datepicker.ru.min.js?version=<? echo $version; ?>"></script>
 
-    <script type="text/javascript" src="js/main.js?version=<?echo $version;?>"></script>
+    <script type="text/javascript" src="js/main.js?version=<? echo $version; ?>"></script>
 
     <title><? echo($title); ?></title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="lib/select2/select2.css?version=<?echo $version;?>">
+    <link rel="stylesheet" href="lib/select2/select2.css?version=<? echo $version; ?>">
 
-    <link rel="stylesheet" href="lib/bootstrap-datepicker/css/bootstrap-datepicker.css?version=<?echo $version;?>">
+    <link rel="stylesheet" href="lib/bootstrap-datepicker/css/bootstrap-datepicker.css?version=<? echo $version; ?>">
 
-    <link rel="stylesheet" href="css/main.css?version=<?echo $version;?>">
+    <link rel="stylesheet" href="css/main.css?version=<? echo $version; ?>">
 
 </head>
 <body>
 
 <header class="header fixed-top">
     <div class="container">
-        <div class="row">
-            <div id="logo" class="col-lg">
-                <a class="logo" href="#<?echo (date("d.m.Y"));?>"><? echo($title); ?></a>
+        <div class="row align-items-center">
+            <div id="logo" class="col-10">
+                <a class="logo" href="#<? echo(date("d.m.Y")); ?>"><? echo($title); ?></a>
             </div>
+            <div id="calendar_button" class="col-2 col-sm-auto justify-content-end">
+                <svg class="calendar-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                     viewBox="-7 0 40 25">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"
+                          fill="white"/>
+                </svg>
+            </div>
+            <div class="top_calendar"></div>
         </div>
     </div>
 </header>
@@ -105,7 +116,7 @@ include "functions.php";
             ?>
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-5 col-md-7 col-sm-9 col-7s start_week">
+                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-9 col-9 start_week">
                         <div class="message_box">
                             <div id="day">
                                 <button type="button" class="close" id="close_message_box" aria-label="Close">
@@ -181,11 +192,9 @@ include "functions.php";
                         }
                         ?>
                     </div>
-                    <section class="col-lg-5 col-md-7 col-sm-9 col-7s start_week">
+                    <section class="col-xl-5 col-lg-5 col-md-5 col-sm-9 col-10">
                         <div class="donat_container">
-                            <div class="calendar day d-flex justify-content-center">
-
-                            </div>
+                            <div class="calendar day justify-content-center"></div>
                             <div class="feedback d-flex justify-content-center">
                                 Для обратной связи: <a href="mailto:ya.slavar@yandex.ru">ya.slavar@yandex.ru</a>
                             </div>
@@ -344,26 +353,38 @@ include "functions.php";
 
     $(document).ready(function () {
 
-        location.href = "#" + formatDate(new Date);
-        location.hash = formatDate(new Date);
+        window.onload = function () {
+            location.href = "#" + formatDate(new Date);
+        };
+
+        $('#calendar_button').click(function () {
+            $('.top_calendar').toggle();
+        });
 
         $('.calendar').datepicker({
             format: "dd.mm.yyyy",
             language: "ru",
             todayHighlight: true
         }).on('changeDate', function (e) {
-            console.log($("a[name='" + formatDate(e.date) + "']"));
             location.href = "#" + formatDate(e.date);
         });
 
-
-        let work_zone = $('.work_zone');
-        work_zone.draggable();
+        $('.top_calendar').datepicker({
+            format: "dd.mm.yyyy",
+            language: "ru",
+            todayHighlight: true
+        }).on('changeDate', function (e) {
+            $('.top_calendar').toggle();
+            location.href = "#" + formatDate(e.date);
+        });
 
         $("#select").select2({
             'width': '185px',
             'language': 'ru'
         });
+
+        let work_zone = $('.work_zone');
+        work_zone.draggable();
 
         $('#zoom_plus').click(function () {
             zoom_element(work_zone, 1, 0.1, 200);

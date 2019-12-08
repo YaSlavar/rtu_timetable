@@ -6,11 +6,11 @@ function get_today_name($date)
     $date = date("d.m.Y", strtotime($date));
     if ($date == $today) {
         return "Сегодня:  ";
-    } elseif ($date == $today + 1){
+    } elseif ($date == $today + 1) {
         return "Завтра:  ";
-    }elseif ($date == $today + 2){
+    } elseif ($date == $today + 2) {
         return "Послезавтра:  ";
-    }else{
+    } else {
         return "";
     }
 }
