@@ -58,7 +58,7 @@ include "functions.php";
     <div class="container">
         <div class="row">
             <div id="logo" class="col-lg">
-                <a class="logo" href="index.php"><? echo($title); ?></a>
+                <a class="logo" href="#<?echo (date("d.m.Y"));?>"><? echo($title); ?></a>
             </div>
         </div>
     </div>
@@ -160,9 +160,9 @@ include "functions.php";
                                 <a name="<? echo(strftime("%d.%m.%Y", strtotime($date))); ?>"></a>
                                 <div id="date">
                                     <?
-                                    echo get_today_name($days);
+                                    echo get_today_name($date);
                                     echo get_day_name($day);
-                                    echo("(" . strftime("%d.%m.%Y", strtotime($date)) . ")");
+                                    echo(" (" . strftime("%d.%m.%Y", strtotime($date)) . ")");
                                     ?>
                                 </div>
                                 <?

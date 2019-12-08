@@ -1,17 +1,17 @@
 <?php
 
-function get_today_name($days)
+function get_today_name($date)
 {
-    switch ($days) {
-        case 1:
-            return "Сегодня:  ";
-            break;
-        case 2:
-            return "Завтра:  ";
-            break;
-        case 3:
-            return "Послезавтра:  ";
-            break;
+    $today = date("d.m.Y");
+    $date = date("d.m.Y", strtotime($date));
+    if ($date == $today) {
+        return "Сегодня:  ";
+    } elseif ($date == $today + 1){
+        return "Завтра:  ";
+    }elseif ($date == $today + 2){
+        return "Послезавтра:  ";
+    }else{
+        return "";
     }
 }
 

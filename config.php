@@ -22,4 +22,4 @@ $semestr_day_count = $semestr_week_count * 7; # Количество дней в
 $etalon_group = "БНБО-02-16"; # Группа отображаемая по умолчанию
 
 
-$version = 28; # Версия
+$version = 29; # Версия
