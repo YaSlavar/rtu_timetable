@@ -31,3 +31,34 @@ function undo_zoom(element, animate_speed = 400) {
 
     element.css({'left': 20, 'top': 60});
 }
+
+function getCookie(name) {
+    let cookie_arr = document.cookie.split('; ');
+    let cookie_obj = {};
+
+    for (let i = 0; i < cookie_arr.length; i++) {
+        let nv = cookie_arr[i].split('=');
+        cookie_obj[nv[0]] = nv[1];
+    }
+
+    return cookie_obj[name];
+}
+
+function setCookie(name, value, set_sec) {
+    let date = new Date(new Date().getTime() + set_sec * 1000);
+    document.cookie = name + "=" + value + "; path=/; expires=" + date.toUTCString();
+}
+
+
+function formatDate(date) {
+
+    function padNum(num) {
+        return num.toString().padStart(2,'0');
+    }
+
+    let day = padNum(date.getDate());
+    let monthIndex = padNum(date.getMonth() + 1);
+    let year = date.getFullYear();
+
+    return day + '.' + monthIndex + '.' + year;
+}

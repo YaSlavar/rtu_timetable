@@ -1,4 +1,7 @@
-<? include('config.php'); ?>
+<?
+include "config.php";
+include "functions.php";
+?>
 <!doctype html>
 <html lang="ru">
 <head>
@@ -32,100 +35,24 @@
     <script type="text/javascript" src="lib/jquery.ui.touch-punch.min.js"></script>
     <script type="text/javascript" src="lib/select2/select2.full.min.js"></script>
     <script type="text/javascript" src="lib/select2/ru.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/messageBoxController.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-datepicker/locales/bootstrap-datepicker.ru.min.js"></script>
+
+    <script type="text/javascript" src="js/main.js"></script>
 
     <title><? echo($title); ?></title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="lib/select2/select2.css?version=2">
+
+    <link rel="stylesheet" href="lib/bootstrap-datepicker/css/bootstrap-datepicker.css">
+
     <link rel="stylesheet" href="css/main.css?version=25">
 
 </head>
 <body>
-
-<?
-
-function get_day_info($db, $gr, $day, $n_week, $week)
-{
-    $item = array();
-    $to_sql_group_name = str_replace("-", "_", $gr);
-    $select = $db->query("SELECT * FROM $to_sql_group_name WHERE day = $day AND week = $n_week");
-    while ($res = $select->fetchArray()) {
-        $result_array = result_fetch_array($res, $week);
-        if ($result_array["show"] != "") {
-            $item[$res['para']] = $result_array;
-        }
-    }
-    return $item;
-}
-
-
-function get_all_info($db, $gr)
-{
-    $item_list = array();
-    $to_sql_group_name = str_replace("-", "_", $gr);
-    $select = $db->query("SELECT * FROM $to_sql_group_name");
-    for ($day = 1; $day < 8; $day++) {
-        for ($week = 1; $week < 3; $week++) {
-            $item_list[$day][$week] = array();
-        }
-    }
-    while ($res = $select->fetchArray()) {
-        array_push($item_list[$res['day']][$res['week']], $res);
-    }
-
-    return $item_list;
-}
-
-function get_max_para_count($item_list)
-{
-    $para_count = 6;
-    foreach ($item_list as $day) {
-        foreach ($day as $week) {
-            foreach ($week as $para) {
-                if ($para['para'] > $para_count) {
-                    $para_count = $para['para'];
-                }
-            }
-        }
-    }
-    return $para_count;
-}
-
-function result_fetch_array($res, $week)
-{
-
-    if ($res['exception'] != '') {
-        $res['exception'] = str_replace("'", "", $res['exception']);
-        $res['exception'] = explode(", ", $res['exception']);
-    }
-    if ($res['include'] != '') {
-        $res['include'] = str_replace("'", "", $res['include']);
-        $res['include'] = explode(", ", $res['include']);
-    }
-    if ($res["include"] == "" and $res["exception"] == "") {
-        $res["show"] = True;
-    }
-    if (is_array($res["include"])) {
-        if (in_array((string)$week, $res["include"], true)) {
-            $res["show"] = True;
-        }
-    }
-    if (is_array($res["exception"])) {
-
-        if (in_array((string)$week, $res["exception"], true)) {
-            $res["show"] = False;
-        } else {
-            $res["show"] = True;
-        }
-    }
-
-    return $res;
-}
-
-?>
 
 <header class="header fixed-top">
     <div class="container">
@@ -138,7 +65,7 @@ function result_fetch_array($res, $week)
 </header>
 
 <section class="cards">
-    <? if ($_GET['group'] == '') { ?>
+    <? if ($_GET['group'] == '' and $_COOKIE['group'] == '') { ?>
         <div class="container">
             <div class="row start">
                 <section class="col-lg-5 col-md-7 col-sm-9">
@@ -159,7 +86,16 @@ function result_fetch_array($res, $week)
         </div>
         <?
     } else {
-        $gr = $_GET['group'];
+
+        if ($_GET['group'] == '' and $_COOKIE['group'] !== '') {
+            $gr = urldecode($_COOKIE['group']);
+            $_GET['group'] = urldecode($_COOKIE['group']);
+        } else if ($_GET['group'] !== '') {
+            setcookie('group', urlencode($_GET['group']), time() + 60 * 60 * 24 * 30 * 12, '/');
+            $gr = $_GET['group'];
+        } else {
+            $gr = $_GET['group'];
+        }
 
         $max_para_count = get_max_para_count(get_all_info($db, $gr));
 
@@ -186,7 +122,8 @@ function result_fetch_array($res, $week)
                                         (по данным Яндекс.Метрики ~500 пользователей в день).
                                     </p>
                                     <p>
-                                        В связи с этим я хотел бы узнать какое количество людей реально пользуется сайтом,
+                                        В связи с этим я хотел бы узнать какое количество людей реально пользуется
+                                        сайтом,
                                         и получить обратную связь (пожелания, предложения по дальнейшей работе сайта).
                                     </p>
                                     <p>
@@ -206,7 +143,7 @@ function result_fetch_array($res, $week)
                             <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
                         </div>
                         <?
-                        for ($days = 1; $days < 25; $days++) {
+                        for ($days = 1; $days < 50; $days++) {
                             $week = (date("W", strtotime($today))) - $delta;
                             if ($week % 2 == 0) {
                                 $n_week = 2;
@@ -221,8 +158,8 @@ function result_fetch_array($res, $week)
                                     <div id="num_week"><? echo((date("W", strtotime($today)) - $delta) . ' неделя'); ?></div>
                                 </div>
                             <? } ?>
-
                             <div id="card">
+                                <a name="<? echo(strftime("%d.%m.%Y", strtotime($today))); ?>"></a>
                                 <div id="date">
                                     <?
                                     echo get_today_name($days);
@@ -246,8 +183,11 @@ function result_fetch_array($res, $week)
                         }
                         ?>
                     </div>
-                    <section class="col-lg-5 col-md-7 col-sm-9">
+                    <section class="col-lg-5 col-md-5 col-sm-9">
                         <div class="donat_container">
+                            <div class="calendar day d-flex justify-content-center">
+
+                            </div>
                             <div class="feedback d-flex justify-content-center">
                                 Для обратной связи: <a href="mailto:ya.slavar@yandex.ru">ya.slavar@yandex.ru</a>
                             </div>
@@ -405,8 +345,17 @@ function result_fetch_array($res, $week)
 <script>
     $(document).ready(function () {
 
-        let work_zone = $('.work_zone');
+        $('.calendar').datepicker({
+            format: "dd.mm.yyyy",
+            language: "ru",
+            todayHighlight: true
+        }).on('changeDate', function (e) {
+            console.log($("a[name='" + formatDate(e.date) + "']"));
+            location.href = "#" + formatDate(e.date);
+        });
 
+
+        let work_zone = $('.work_zone');
         work_zone.draggable();
 
         $("#select").select2({

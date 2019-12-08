@@ -89,7 +89,8 @@ div#num_week{
 }
 div#date{
     font-size: 1.2em;
-    padding: 10px 0 0 5px;
+    padding: 70px 0 0 5px;
+    margin-top: -60px;
 }
 
 div#day{
@@ -135,7 +136,15 @@ div#sun{
 }
 .donat_container{
     margin-bottom: 110px;
+    position: fixed;
 }
+
+@media (max-width: 768px) {
+    .donat_container{
+        position: relative;
+    }
+}
+
 .donat{
     background-color:white;
     box-shadow: 0 3px 6px 1px #bdbdbd59;
@@ -217,6 +226,24 @@ div#sun{
 .one_day #card #day table#maket{
      table-layout: fixed;
 
+}
+
+/* CALENDAR */
+.datepicker{
+    background: white;
+    box-shadow: 0px 3px 6px 1px #bdbdbd59;
+    border-radius: 10px;
+    /* margin-top: 10px; */
+    margin-bottom: 15px;
+    padding: 20px 14px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.datepicker table tr td.active {
+    background-image: none;
+    background-color: #1e7e34;
 }
 
 /*BOTTOMS*/
