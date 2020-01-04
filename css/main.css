@@ -69,8 +69,7 @@ div#logo {
     text-align: center;
     color: #3f51b5;
     font-size: 1.5em;
-    height: 100px;
-    margin-top: 25px;
+    margin: 25px 0 10px 0;
     vertical-align: middle;
 }
 
