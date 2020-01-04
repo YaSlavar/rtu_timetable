@@ -60,13 +60,9 @@ div#logo {
 }
 
 /*CARDS*/
-.message_box {
-    display: none;
-}
-
-.message_text {
-    font-size: 1.1em;
-    /*color: #3f51b5;*/
+.group_name {
+    margin: 0 10px 0 0;
+    width: 100px;
 }
 
 .none-group {
@@ -235,7 +231,7 @@ div#sun {
 }
 
 .one_day {
-    display: inline-flex;
+    display: flex;
 }
 
 .one_day #card {
@@ -288,6 +284,23 @@ div#sun {
 .datepicker table tr td.active {
     background-image: none;
     background-color: #1e7e34;
+}
+
+/*NOTIFICATIONS*/
+.toast_tail{
+    background-color: white;
+    box-shadow: 0 0.2rem 1rem 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: none;
+    border-radius: 10px;
+}
+
+.notification_header{
+    color: white;
+    background-color: rgb(63, 81, 181);
+}
+
+.notification_close{
+    color: white;
 }
 
 /*BOTTOMS*/

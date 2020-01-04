@@ -30,6 +30,12 @@ include "functions.php";
     <meta name="theme-color" content="#ffffff">
     <meta name="yandex-verification" content="6990c8ac978b974f"/>
 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css?version=<? echo $version; ?>">
+    <link rel="stylesheet" href="lib/select2/select2.css?version=<? echo $version; ?>">
+    <link rel="stylesheet" href="lib/bootstrap-datepicker/css/bootstrap-datepicker.css?version=<? echo $version; ?>">
+    <link rel="stylesheet" href="css/main.css?version=<? echo $version; ?>">
+
     <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="lib/jquery.ui.touch-punch.min.js"></script>
@@ -40,18 +46,10 @@ include "functions.php";
             src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js?version=<? echo $version; ?>"></script>
     <script type="text/javascript"
             src="lib/bootstrap-datepicker/locales/bootstrap-datepicker.ru.min.js?version=<? echo $version; ?>"></script>
-
+    <script type="text/javascript" src="lib/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="js/main.js?version=<? echo $version; ?>"></script>
 
     <title><? echo($title); ?></title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="lib/select2/select2.css?version=<? echo $version; ?>">
-
-    <link rel="stylesheet" href="lib/bootstrap-datepicker/css/bootstrap-datepicker.css?version=<? echo $version; ?>">
-
-    <link rel="stylesheet" href="css/main.css?version=<? echo $version; ?>">
 
 </head>
 <body>
@@ -59,6 +57,7 @@ include "functions.php";
 <header class="header fixed-top">
     <div class="container">
         <div class="row align-items-center">
+            <a name="top"></a>
             <div id="logo" class="col-10">
                 <a class="logo" href="#<? echo(date("d.m.Y")); ?>"><? echo($title); ?></a>
             </div>
@@ -76,243 +75,59 @@ include "functions.php";
 </header>
 
 <section class="cards">
-    <? if ($_GET['group'] == '' and $_COOKIE['group'] == '') { ?>
-        <div class="container">
-            <div class="row start">
-                <section class="col-lg-5 col-md-7 col-sm-9">
-                    <div class="donat_container">
-                        <div class="feedback d-flex justify-content-center">
-                            Для обратной связи: <a href="mailto:ya.slavar@yandex.ru">ya.slavar@yandex.ru</a>
-                        </div>
-                    </div>
-                </section>
-                <div class="col-lg-6 col-md-8 col-sm-10 none-group d-flex justify-content-center align-items-center">
-                    <div>
-                        Добро пожаловать на сайт!
-                        <br>
-                        Пожалуйста, выберите Вашу учебную группу.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?
+    <? if ($_GET['group'] == '' and $_COOKIE['group'] == '') {
+        include("views/main.php");
     } else {
-
         if ($_GET['group'] == '' and $_COOKIE['group'] !== '') {
-            $gr = urldecode($_COOKIE['group']);
+            $group = urldecode($_COOKIE['group']);
             $_GET['group'] = urldecode($_COOKIE['group']);
         } else if ($_GET['group'] !== '') {
             setcookie('group', urlencode($_GET['group']), time() + 60 * 60 * 24 * 30 * 12, '/');
-            $gr = $_GET['group'];
+            $group = $_GET['group'];
         } else {
-            $gr = $_GET['group'];
+            $group = $_GET['group'];
         }
 
-        $max_para_count = get_max_para_count(get_all_info($db, $gr));
+        $max_para_count = get_max_para_count(get_all_info($db, $group));
+
+        $postfix = get_group_postfix($group);
+        $group_type = get_group_type($postfix);
+        $course_num = get_course_num($group);
+        $semestr_week_count = get_semester_week_count($group_type, $course_num, $week_count_array, $semester_count);
 
         if ($_GET['view'] !== 'table') {
-
-            $date = date("Y-m-d", strtotime($start_day));
-            ?>
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-5 col-md-6 col-sm-9 col-9 start_week">
-                        <div class="message_box">
-                            <div id="day">
-                                <button type="button" class="close" id="close_message_box" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <div class="message_text">
-                                    <p>Здравствуйте!</p>
-                                    <p>
-                                        В конце сентября на сайте произошла ошибка в связи с тем, что был исчерпан лимит
-                                        трафика заданный хостинг-провайдером.
-                                    </p>
-                                    <p>
-                                        Я не расчитывал, что у этого сайта будет такое большое количество посетителей
-                                        <br>
-                                        (по данным Яндекс.Метрики ~500 пользователей в день).
-                                    </p>
-                                    <p>
-                                        В связи с этим я хотел бы узнать какое количество людей реально пользуется
-                                        сайтом,
-                                        и получить обратную связь (пожелания, предложения по дальнейшей работе сайта).
-                                    </p>
-                                    <p>
-                                        Если не трудно, заполните пожалуйта небольшую форму по
-                                        <a href="https://forms.gle/4zPKSxpwzgeerQ6s5">ссылке</a>.
-                                        <br>
-                                        --------
-                                        <br>
-                                        С уважением, Вячеслав.
-                                    </p>
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <?
-                        for ($days = 1; $days < $semestr_day_count + 1; $days++) {
-                            $week = (date("W", strtotime($date))) - $delta;
-                            if ($week % 2 == 0) {
-                                $n_week = 2;
-                            } else {
-                                $n_week = 1;
-                            }
-                            $day = strftime("%w", strtotime($date));
-
-                            $today_date = date('Y-m-d');
-                            if ($day == 1 and $date != $today_date) { ?>
-                                <div id="border_num_week">
-                                    <div id="num_week"><? echo((date("W", strtotime($date)) - $delta) . ' неделя'); ?></div>
-                                </div>
-                            <? } ?>
-                            <div id="card">
-                                <a name="<? echo(strftime("%d.%m.%Y", strtotime($date))); ?>"></a>
-                                <div id="date">
-                                    <?
-                                    echo get_today_name($date);
-                                    echo get_day_name($day);
-                                    echo(" (" . strftime("%d.%m.%Y", strtotime($date)) . ")");
-                                    ?>
-                                </div>
-                                <?
-                                $item = get_day_info($db, $gr, $day, $n_week, $week);
-                                ?>
-                                <div id="day">
-                                    <? if ($item == array()) {
-                                        echo('<div id="sun">Выходной</div>');
-                                    } else {
-                                        include('day_table.php');
-                                    } ?>
-                                </div>
-                            </div>
-
-                            <? $date = date("Y-m-d", strtotime($date) + 86400);
-                        }
-                        ?>
-                    </div>
-                    <section class="col-xl-5 col-lg-5 col-md-5 col-sm-9 col-10">
-                        <div class="donat_container">
-                            <div class="calendar day justify-content-center"></div>
-                            <div class="feedback d-flex justify-content-center">
-                                Для обратной связи: <a href="mailto:ya.slavar@yandex.ru">ya.slavar@yandex.ru</a>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        <? } else { ?>
-            <? $list_info = get_all_info($db, $gr); ?>
-            <div class="cards_table container-fluid">
-                <div class="work_zone">
-                    <? $today = date('Y-m-d'); ?>
-
-                    <? for ($days = 1; $days < 8; $days++) { ?>
-                        <div class="one_day">
-                            <?
-                            $temp_date = $start_day;
-                            for ($week = 1; $week < $semestr_week_count + 1; $week++) {
-                                if ($week % 2 == 0) {
-                                    $n_week = 2;
-                                } else {
-                                    $n_week = 1;
-                                }
-
-                                $item = array();
-                                foreach ($list_info[$days][$n_week] as $res) {
-                                    $result_array = result_fetch_array($res, $week);
-                                    if ($result_array["show"] != "") {
-                                        $item[$res['para']] = $result_array;
-                                    }
-                                }
-                                ?>
-
-                                <div id="card">
-                                    <div id="date">
-                                        <? if ($days == 1) { ?>
-                                            <div class="num_week">
-                                                <? echo($week . " неделя"); ?>
-                                            </div>
-                                        <? } ?>
-                                        <?
-                                        echo get_day_name($days);
-                                        echo("(");
-                                        echo(strftime("%d.%m.%Y", strtotime($temp_date)));
-                                        echo(")");
-                                        ?>
-                                    </div>
-                                    <? if ($temp_date == $today) {
-                                        echo '<a name="today"></a>';
-                                    } ?>
-
-                                    <div id="day"
-                                        <? if ($temp_date == $today) {
-                                            echo 'style="box-shadow: 0px 1px 15px 0px #ff1700;"';
-                                        } ?>>
-                                        <? if ($item == array()) {
-                                            echo('<div id="sun">Выходной</div>');
-                                        } else {
-                                            include('day_table.php');
-                                        } ?>
-                                    </div>
-                                </div>
-
-                                <? $temp_date = date("Y-m-d", strtotime($temp_date) + 604800); ?>
-                            <? } ?>
-                        </div>
-                        <?
-                        $start_day = date("Y-m-d", strtotime($start_day) + 86400);
-                    }
-                    ?>
-                </div>
-            </div>
-        <? }
+            include("views/list_view.php");
+        } else {
+            include("views/table_view.php");
+        }
     } ?>
 </section>
 
-<? if ($_GET['view'] === 'table') { ?>
-    <div class="zoom_bottoms fix-middle-right padding-right-20">
-        <button id="zoom_plus" class="btn-light light_bottom round_bottom-50">
-            <svg class="btn_icon_blue" xmlns="http://www.w3.org/2000/svg" fill="white" width="30" height="30"
-                 viewBox="0 0 24 24">
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#3f51b5"></path>
-                <path d="M0 0h24v24H0z" fill="none"></path>
-            </svg>
-        </button>
-        <button id="zoom_minus" class="btn-light light_bottom round_bottom-50">
-            <svg class="btn_icon_blue" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 8 24 24">
-                <path d="M6 19h12v2H6z" fill="#3f51b5"></path>
-                <path fill="none" d="M0 0h24v24H0V0z"></path>
-            </svg>
-        </button>
-        <button id="undo_zoom" class="btn-light light_bottom round_bottom-50">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"
-                      fill="#3f51b5"></path>
-                <path d="M0 0h24v24H0z" fill="none"></path>
-            </svg>
-        </button>
-    </div>
-<? } ?>
+<? if ($_GET['view'] === 'table') {
+    include("views/components/zoom_buttons.php");
+} ?>
 
 <footer class="bottoms fixed-bottom">
+
+    <?
+    include("views/components/notification_tail.php");
+    ?>
+
     <div class="container d-flex justify-content-end">
         <form action="" method="get" name="select_group">
-            <? $group_list = $db->query('SELECT tbl_name FROM sqlite_master'); ?>
+            <? $group_list = get_group_list($db); ?>
             <div id="bg">
                 <div class="group_container">
                     <select name="group" title="" id="select" class="group_selector"
                             onchange="document.forms['select_group'].submit()">
                         <?
-                        if (!isset($gr)) {
-                            $gr = $etalon_group;
+                        if (!isset($group)) {
+                            $group = $etalon_group;
                         }
                         while ($row = $group_list->fetchArray()) {
-                            $group_name = str_replace("_", "-", $row[0])
-
+                            $group_name = str_replace("_", "-", $row[0]);
                             ?>
-                            <option <? if ($group_name == $gr) {
+                            <option <? if ($group_name == $group) {
                                 echo("selected");
                             } ?> value="<? echo(urldecode($group_name)); ?>"><b><? echo($group_name); ?></b></option>
                         <? } ?>
@@ -325,7 +140,7 @@ include "functions.php";
         </form>
 
         <? if ($_GET['view'] !== 'table') { ?>
-            <a href="?view=table&group=<? echo($gr); ?>#today">
+            <a href="?view=table&group=<? echo($group); ?>#today">
                 <div class="bottom">
                     <svg fill="white" height="40" viewBox="0 0 24 24" width="40" class="svg"
                          xmlns="http://www.w3.org/2000/svg">
@@ -335,7 +150,7 @@ include "functions.php";
                 </div>
             </a>
         <? } else { ?>
-            <a href="index.php?group=<? echo($gr); ?>">
+            <a href="index.php?group=<? echo($group); ?>">
                 <div class="bottom">
                     <svg fill="white" height="40" viewBox="0 0 24 24" width="40" class="svg"
                          xmlns="http://www.w3.org/2000/svg">
@@ -354,6 +169,7 @@ include "functions.php";
     $(document).ready(function () {
 
         window.onload = function () {
+            location.href = "#top";
             location.href = "#" + formatDate(new Date);
         };
 
@@ -398,21 +214,34 @@ include "functions.php";
             undo_zoom(work_zone);
         });
 
+        message_box_control(<?echo($notification);?>);
+
     });
 </script>
 
 <!-- Yandex.Metrika counter -->
-<script type="text/javascript"> (function (m, e, t, r, i, k, a) {
+<script type="text/javascript">
+    (function (m, e, t, r, i, k, a) {
         m[i] = m[i] || function () {
             (m[i].a = m[i].a || []).push(arguments)
         };
         m[i].l = 1 * new Date();
         k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-    ym(50639506, "init", {clickmap: true, trackLinks: true, accurateTrackBounce: true, trackHash: true}); </script>
+    })
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(50639506, "init", {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+        trackHash: true
+    });
+</script>
 <noscript>
     <div><img src="https://mc.yandex.ru/watch/50639506" style="position:absolute; left:-9999px;" alt=""/></div>
-</noscript> <!-- /Yandex.Metrika counter -->
+</noscript>
+<!-- /Yandex.Metrika counter -->
 
 </body>
 </html>
