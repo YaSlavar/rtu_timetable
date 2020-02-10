@@ -133,7 +133,7 @@
   .select2-container--default .select2-selection--single .select2-selection__rendered {
     /*color: #444;*/
     /*line-height: 28px; */
-    /*width: 180px;*/
+    width: 180px;
     height: 65px;
     border: none;
     color: #3f51b5;

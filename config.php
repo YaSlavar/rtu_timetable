@@ -10,6 +10,8 @@ global $db;
 
 $path_to_db_file = "table.db";
 
+$last_upload_date = date('d.m.Y', filemtime($path_to_db_file));
+
 $db = new SQLite3($path_to_db_file);
 
 
@@ -132,7 +134,7 @@ $notification = json_encode(array(
                     --<br>
                     С уважением, Вячеслав.
                     <br><br>
-                    Последнее обновление расписания: " . date('d.m.Y', filemtime($path_to_db_file)) . "",
+                    Последнее обновление расписания: " . $last_upload_date . "",
     "date" => "05.02.2020"
 ));
 

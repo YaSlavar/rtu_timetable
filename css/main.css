@@ -16,7 +16,6 @@
 body {
     -ms-user-select: none;
     -moz-user-select: none;
-    -khtml-user-select: none;
     -webkit-user-select: none;
     font-family: Roboto-Regular, serif;
     background: #f5f5f5;;
@@ -36,7 +35,7 @@ div#logo {
 
 .header {
     background-color: #3f51b5;
-    box-shadow: 0 1px 20px 0px #bdbdbd;
+    box-shadow: 0 1px 20px 0 #bdbdbd;
     z-index: 999;
 }
 
@@ -116,7 +115,7 @@ div#date {
 
 div#day {
     background-color: white;
-    box-shadow: 0px 3px 6px 1px #bdbdbd59;
+    box-shadow: 0 3px 6px 1px #bdbdbd59;
     border-radius: 10px;
     margin-top: 10px;
     margin-bottom: 15px;
@@ -153,7 +152,7 @@ div#prepod {
 }
 
 div#border {
-    margin: 5px 10px 0px -5px;
+    margin: 5px 10px 0 -5px;
     border-bottom: 1px solid #e0e0e5b8;
 }
 
@@ -270,7 +269,7 @@ div#sun {
 /* CALENDAR */
 .datepicker {
     background: white;
-    box-shadow: 0px 3px 6px 1px #bdbdbd59;
+    box-shadow: 0 3px 6px 1px #bdbdbd59;
     border-radius: 10px;
     /* margin-top: 10px; */
     margin-bottom: 15px;
@@ -321,7 +320,7 @@ div#bottom_gr {
     width: 275px;
     border-radius: 80px;
     background-color: white;
-    box-shadow: 0px 3px 6px 1px #bdbdbd59;
+    box-shadow: 0 3px 6px 1px #bdbdbd59;
     color: #3f51b5;
     border: solid 1px #bdbdbd59;
 }
@@ -419,6 +418,10 @@ div#bottom_gr {
 
 #undo_zoom {
     display: none;
+}
+
+.last_upload_date{
+    margin: 10px 0;
 }
 
 

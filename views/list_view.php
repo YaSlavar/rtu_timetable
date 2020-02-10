@@ -66,6 +66,9 @@ global $email_to_feedback;
                 <div class="feedback d-flex justify-content-center">
                     Для обратной связи: <a href="<? echo($email_to_feedback); ?>"><? echo($email_to_feedback); ?></a>
                 </div>
+                <div class="last_upload_date">
+                    Последнее обновление расписания: <? echo($last_upload_date); ?>
+                </div>
             </div>
         </section>
     </div>

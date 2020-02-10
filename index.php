@@ -101,6 +101,7 @@ include "functions.php";
             include("views/table_view.php");
         }
     } ?>
+
 </section>
 
 <? if ($_GET['view'] === 'table') {
