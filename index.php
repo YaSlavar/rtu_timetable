@@ -75,16 +75,22 @@ include "functions.php";
 </header>
 
 <section class="cards">
-    <? if ($_GET['group'] == '' and $_COOKIE['group'] == '') {
+    <? if (empty($_GET['group']) and empty($_COOKIE['group'])) {
         include("views/main.php");
     } else {
-        if ($_GET['group'] == '' and $_COOKIE['group'] !== '') {
+
+        if (!empty($_GET['group']) and !empty($_COOKIE['group'])) {
+            if ($_GET['group'] !== $_COOKIE['group']) {
+                $group = $_GET['group'];
+                setcookie('group', urlencode($_GET['group']), time() + 60 * 60 * 24 * 30 * 12, '/');
+            } else {
+                $group = $_GET['group'];
+            }
+        } elseif (empty($_GET['group']) and !empty($_COOKIE['group'])) {
             $group = urldecode($_COOKIE['group']);
-            $_GET['group'] = urldecode($_COOKIE['group']);
-        } else if ($_GET['group'] !== '') {
-            setcookie('group', urlencode($_GET['group']), time() + 60 * 60 * 24 * 30 * 12, '/');
-            $group = $_GET['group'];
+            $_GET['group'] = $group;
         } else {
+            setcookie('group', urlencode($_GET['group']), time() + 60 * 60 * 24 * 30 * 12, '/');
             $group = $_GET['group'];
         }
 

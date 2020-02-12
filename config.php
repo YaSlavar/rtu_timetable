@@ -138,4 +138,4 @@ $notification = json_encode(array(
     "date" => "05.02.2020"
 ));
 
-$version = 35; # Версия
+$version = 36; # Версия
