@@ -94,18 +94,27 @@ include "functions.php";
             $group = $_GET['group'];
         }
 
-        $max_para_count = get_max_para_count(get_all_info($db, $group));
 
-        $postfix = get_group_postfix($group);
-        $group_type = get_group_type($postfix);
-        $course_num = get_course_num($group);
-        $semestr_week_count = get_semester_week_count($group_type, $course_num, $week_count_array, $semester_count);
+        $all_info = get_all_info($db, $group);
 
-        if ($_GET['view'] !== 'table') {
-            include("views/list_view.php");
+        if ($all_info) {
+            $max_para_count = get_max_para_count($all_info);
+            $postfix = get_group_postfix($group);
+            $group_type = get_group_type($postfix);
+            $course_num = get_course_num($group);
+            $semestr_week_count = get_semester_week_count($group_type, $course_num, $week_count_array, $semester_count);
+
+
+            if ($_GET['view'] === 'table') {
+                include("views/table_view.php");
+            } else {
+                include("views/list_view.php");
+            }
+
         } else {
-            include("views/table_view.php");
+            include("views/main.php");
         }
+
     } ?>
 
 </section>

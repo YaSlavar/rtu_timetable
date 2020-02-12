@@ -188,19 +188,23 @@ function get_all_info($db, $gr)
     $item_list = array();
     $to_sql_group_name = str_replace("-", "_", $gr);
     $select = $db->query("SELECT * FROM $to_sql_group_name");
-    for ($day = 1; $day < 8; $day++) {
-        for ($week = 1; $week < 3; $week++) {
-            $item_list[$day][$week] = array();
-        }
-    }
 
-    while ($res = $select->fetchArray(SQLITE3_ASSOC)) {
-        if (is_array($item_list[$res['day']][$res['week']])) {
-            array_push($item_list[$res['day']][$res['week']], $res);
-        }
-    }
 
-    return $item_list;
+    if ($select !== false){
+        for ($day = 1; $day < 8; $day++) {
+            for ($week = 1; $week < 3; $week++) {
+                $item_list[$day][$week] = array();
+            }
+        }
+
+        while ($res = $select->fetchArray(SQLITE3_ASSOC)) {
+            if (is_array($item_list[$res['day']][$res['week']])) {
+                array_push($item_list[$res['day']][$res['week']], $res);
+            }
+        }
+        return $item_list;
+    }
+    return false;
 }
 
 function get_max_para_count($item_list)
