@@ -106,19 +106,19 @@ function get_para_time($para)
             return "10:40";
             break;
         case 3:
-            return "13:10";
+            return "12:40";
             break;
         case 4:
-            return "14:50";
+            return "14:20";
             break;
         case 5:
-            return "16:30";
+            return "16:20";
             break;
         case 6:
-            return "18:10";
+            return "18:00";
             break;
         case 7:
-            return "19:50";
+            return "18:30";
             break;
         case 8:
             return "20:10";
