@@ -98,7 +98,7 @@ include "functions.php";
         $all_info = get_all_info($db, $group);
 
         if ($all_info) {
-            $max_para_count = get_max_para_count($all_info);
+            $max_lesson_count = get_max_leson_count($all_info);
             $postfix = get_group_postfix($group);
             $group_type = get_group_type($postfix);
             $course_num = get_course_num($group);

@@ -96,9 +96,9 @@ function get_day_name($day)
     }
 }
 
-function get_para_time($para)
+function get_lesson_time($lesson)
 {
-    switch ($para) {
+    switch ($lesson) {
         case 1:
             return "9:00";
             break;
@@ -157,7 +157,7 @@ function get_day_info($db, $gr, $day, $n_week, $week, $date = null, $timetable_t
     while ($res = $select->fetchArray()) {
         $result_array = result_fetch_array($res, $week);
         if ($result_array["show"] != "" and $result_array["doc_type"] == $timetable_type) {
-            $item[$res['para']] = $result_array;
+            $item[$res['lesson']] = $result_array;
         }
     }
 
@@ -207,19 +207,19 @@ function get_all_info($db, $gr)
     return false;
 }
 
-function get_max_para_count($item_list)
+function get_max_leson_count($item_list)
 {
-    $para_count = 6;
+    $lesson_count = 6;
     foreach ($item_list as $day) {
         foreach ($day as $week) {
-            foreach ($week as $para) {
-                if ($para['para'] > $para_count) {
-                    $para_count = $para['para'];
+            foreach ($week as $lesson) {
+                if ($lesson['lesson'] > $lesson_count) {
+                    $lesson_count = $lesson['lesson'];
                 }
             }
         }
     }
-    return $para_count;
+    return $lesson_count;
 }
 
 function result_fetch_array($res, $week)
